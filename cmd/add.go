@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/JVillafruela/tri/todo"
 	"github.com/spf13/cobra"
@@ -45,9 +46,16 @@ func init() {
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-	items := []todo.Item{}
+	items, err := todo.ReadItems("items.json")
+	if err != nil {
+		log.Printf("%v", err)
+	}
 	for _, x := range args {
 		items = append(items, todo.Item{Text: x})
 	}
-	fmt.Printf("%#v\n", items)
+	//fmt.Printf("%#v\n", items)
+	err = todo.SaveItems("items.json", items)
+	if err != nil {
+		fmt.Println(fmt.Errorf("%v", err))
+	}
 }

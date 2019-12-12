@@ -3,4 +3,4 @@
 
  https://spf13.com/presentation/building-an-awesome-cli-app-in-go-oscon/ 
 
-State : slide #214
+State : slide #247
