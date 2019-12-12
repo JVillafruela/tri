@@ -67,6 +67,7 @@ func init() {
 		log.Println("Unable to detect home directory. Please set data file using --datafile.")
 	}
 	rootCmd.PersistentFlags().StringVar(&dataFile, "datafile", home+string(os.PathSeparator)+"tridos.json", "data file to store todos")
+
 }
 
 // initConfig reads in config file and ENV variables if set.
