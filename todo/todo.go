@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strconv"
 )
 
 type Item struct {
 	Text     string
 	Priority int
+	position int
 }
 
 func (i *Item) SetPriority(pri int) {
@@ -36,6 +38,10 @@ func (i *Item) PrettyPriority() string {
 	return pri
 }
 
+func (i *Item) Label() string {
+	return strconv.Itoa(i.position) + ". "
+}
+
 // save items slide #219
 func SaveItems(filename string, items []Item) error {
 	b, err := json.Marshal(items)
@@ -58,6 +64,9 @@ func ReadItems(filename string) ([]Item, error) {
 	var items []Item
 	if err := json.Unmarshal(b, &items); err != nil {
 		return []Item{}, nil
+	}
+	for i := range items {
+		items[i].position = i + 1
 	}
 	return items, nil
 }
