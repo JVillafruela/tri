@@ -23,6 +23,19 @@ func (i *Item) SetPriority(pri int) {
 
 }
 
+func (i *Item) PrettyPriority() string {
+	var pri string
+	switch i.Priority {
+	case 1:
+		pri = "(1)"
+	case 3:
+		pri = "(3)"
+	default:
+		pri = "   "
+	}
+	return pri
+}
+
 // save items slide #219
 func SaveItems(filename string, items []Item) error {
 	b, err := json.Marshal(items)
