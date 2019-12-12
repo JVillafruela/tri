@@ -29,7 +29,7 @@ var listCmd = &cobra.Command{
 	Short: "list todos",
 	Long:  `Print todo list.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		items, err := todo.ReadItems("items.json")
+		items, err := todo.ReadItems(dataFile)
 		if err != nil {
 			log.Printf("%v", err)
 		}

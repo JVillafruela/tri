@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -24,6 +25,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+var dataFile string
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
@@ -59,6 +61,12 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	home, err := homedir.Dir()
+	if err != nil {
+		log.Println("Unable to detect home directory. Please set data file using --datafile.")
+	}
+	rootCmd.PersistentFlags().StringVar(&dataFile, "datafile", home+string(os.PathSeparator)+"tridos.json", "data file to store todos")
 }
 
 // initConfig reads in config file and ENV variables if set.
