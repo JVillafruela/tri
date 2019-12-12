@@ -18,6 +18,9 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"strconv"
+	"text/tabwriter"
 
 	"github.com/JVillafruela/tri/todo"
 	"github.com/spf13/cobra"
@@ -26,15 +29,9 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list todos",
-	Long:  `Print todo list.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		items, err := todo.ReadItems(dataFile)
-		if err != nil {
-			log.Printf("%v", err)
-		}
-		fmt.Println(items)
-	},
+	Short: "List the todos",
+	Long:  `Listing todo list.`,
+	Run:   listRun,
 }
 
 func init() {
@@ -49,4 +46,16 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func listRun(cmd *cobra.Command, args []string) {
+	items, err := todo.ReadItems(dataFile)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+	for _, i := range items {
+		fmt.Fprintln(w, strconv.Itoa(i.Priority)+"\t"+i.Text+"\t")
+	}
+	w.Flush()
 }
