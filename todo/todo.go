@@ -13,6 +13,22 @@ type Item struct {
 	position int
 }
 
+//ByPri implements sort.Interface for []Item based on
+//the priority & position field.
+type ByPri []Item
+
+func (s ByPri) Len() int      { return len(s) }
+func (s ByPri) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+func (s ByPri) Less(i, j int) bool {
+	//fmt.Printf("DDD Less %d %d\n", i, j)
+	if s[i].Priority == s[j].Priority {
+		//fmt.Printf("DDD same pri %v \n", s[i].position < s[j].position)
+		return s[i].position < s[j].position
+	}
+	//fmt.Printf("DDD diff pri %v \n", s[i].Priority < s[j].Priority)
+	return s[i].Priority > s[j].Priority // priority 1 > 2 > 3
+}
+
 func (i *Item) SetPriority(pri int) {
 	switch pri {
 	case 1:
