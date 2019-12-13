@@ -26,6 +26,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	doneOpt bool
+	allOpt  bool
+)
+
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
@@ -48,6 +53,7 @@ func init() {
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'done' todos")
+	listCmd.Flags().BoolVar(&allOpt, "all", false, "Show all todos")
 }
 
 func listRun(cmd *cobra.Command, args []string) {
@@ -58,7 +64,7 @@ func listRun(cmd *cobra.Command, args []string) {
 	sort.Sort(todo.ByPri(items))
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
 	for _, i := range items {
-		if i.Done == doneOpt {
+		if allOpt || i.Done == doneOpt {
 			fmt.Fprintln(w, i.Label()+"\t"+i.PrettyDone()+"\t"+i.PrettyPriority()+"\t"+i.Text+"\t")
 		}
 	}

@@ -25,8 +25,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var doneOpt bool
-
 // doneCmd represents the done command
 var doneCmd = &cobra.Command{
 	Use:     "done",
