@@ -1,3 +1,4 @@
+//Package cmd command line
 /*
 Copyright © 2019 Jérôme Villafruela
 

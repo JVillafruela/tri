@@ -1,3 +1,4 @@
+//Package cmd command line
 /*
 Copyright © 2019 NAME HERE <EMAIL ADDRESS>
 
@@ -30,7 +31,7 @@ var doneCmd = &cobra.Command{
 	Use:     "done",
 	Aliases: []string{"do"},
 	Short:   "Mark item as done",
-	Run:     DoneRun,
+	Run:     doneRun,
 }
 
 func init() {
@@ -47,10 +48,10 @@ func init() {
 	// doneCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func DoneRun(cmd *cobra.Command, args []string) {
+func doneRun(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
-		log.Fatalln("Read items : %v", err)
+		log.Fatalf("Read items : %v\n", err)
 	}
 	i, err := strconv.Atoi(args[0])
 	if err != nil {
@@ -62,7 +63,7 @@ func DoneRun(cmd *cobra.Command, args []string) {
 		sort.Sort(todo.ByPri(items))
 		err = todo.SaveItems(dataFile, items)
 		if err != nil {
-			log.Fatalln("Save items : %v", err)
+			log.Fatalf("Save items : %v\ns", err)
 		}
 	} else {
 		log.Println(i, "doesnt match any item")
