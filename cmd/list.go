@@ -45,7 +45,7 @@ func init() {
 func listRun(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf("%v\n", err)
 	}
 	sort.Sort(todo.ByPri(items))
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
