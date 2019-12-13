@@ -18,49 +18,55 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 	"sort"
-	"text/tabwriter"
+	"strconv"
 
 	"github.com/JVillafruela/tri/todo"
 	"github.com/spf13/cobra"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List the todos",
-	Long:  `Listing todo list.`,
-	Run:   listRun,
+var doneOpt bool
+
+// doneCmd represents the done command
+var doneCmd = &cobra.Command{
+	Use:     "done",
+	Aliases: []string{"do"},
+	Short:   "Mark item as done",
+	Run:     DoneRun,
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(doneCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// doneCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'done' todos")
+	// doneCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func listRun(cmd *cobra.Command, args []string) {
+func DoneRun(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
-		log.Printf("%v", err)
+		log.Fatalln("Read items : %v", err)
 	}
-	sort.Sort(todo.ByPri(items))
-	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-	for _, i := range items {
-		if i.Done == doneOpt {
-			fmt.Fprintln(w, i.Label()+"\t"+i.PrettyDone()+"\t"+i.PrettyPriority()+"\t"+i.Text+"\t")
+	i, err := strconv.Atoi(args[0])
+	if err != nil {
+		log.Fatalln(args[0], "is not a valid label", err)
+	}
+	if i > 0 && i < len(items) {
+		items[i-1].Done = true
+		fmt.Printf("%s %v\n", items[i-1].Text, "marked done")
+		sort.Sort(todo.ByPri(items))
+		err = todo.SaveItems(dataFile, items)
+		if err != nil {
+			log.Fatalln("Save items : %v", err)
 		}
+	} else {
+		log.Println(i, "doesnt match any item")
 	}
-	w.Flush()
 }
