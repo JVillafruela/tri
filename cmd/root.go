@@ -74,6 +74,7 @@ func initConfig() {
 		viper.SetConfigName(".tri")
 	}
 
+	viper.SetEnvPrefix("tri")
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.

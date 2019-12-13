@@ -4,6 +4,8 @@ package cmd
 import (
 	"log"
 
+	"github.com/spf13/viper"
+
 	"github.com/JVillafruela/tri/todo"
 	"github.com/spf13/cobra"
 )
@@ -35,6 +37,7 @@ func init() {
 }
 
 func addRun(cmd *cobra.Command, args []string) {
+	dataFile := viper.GetString("datafile")
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
 		log.Printf("%v\n", err)

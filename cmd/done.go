@@ -9,6 +9,7 @@ import (
 
 	"github.com/JVillafruela/tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // doneCmd represents the done command
@@ -34,6 +35,7 @@ func init() {
 }
 
 func doneRun(cmd *cobra.Command, args []string) {
+	dataFile := viper.GetString("datafile")
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
 		log.Fatalf("Read items : %v\n", err)
